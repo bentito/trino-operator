@@ -1,7 +1,7 @@
 domain: tofel.tech
 layout:
 - quarkus.javaoperatorsdk.io/v1-alpha
-projectName: trino-operator
+projectName: trino
 resources:
 - api:
     crdVersion: v1
