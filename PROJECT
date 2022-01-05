@@ -1,0 +1,13 @@
+domain: tofel.tech
+layout:
+- quarkus.javaoperatorsdk.io/v1-alpha
+projectName: trino-operator
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  domain: tofel.tech
+  group: tofel.tech
+  kind: Trino-operator
+  version: v1alpha1
+version: "3"
