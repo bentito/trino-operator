@@ -28,6 +28,9 @@ docker-build: ## Build docker image with the manager.
 docker-push: ## Push docker image with the manager.
 	mvn package -Dquarkus.container-image.push=true -Dquarkus.container-image.image=${IMG}
 
+docker-push-alt: ## just use container engine to do the push
+	docker push ${IMG}
+
 ##@ Deployment
 
 install: ## Install CRDs into the K8s cluster specified in ~/.kube/config.
@@ -41,3 +44,12 @@ deploy: ## Deploy controller to the K8s cluster specified in ~/.kube/config.
 
 undeploy: ## Undeploy controller from the K8s cluster specified in ~/.kube/config.
 	kubectl delete -f target/kubernetes/kubernetes.yml
+
+do-all: docker-build docker-push-alt install deploy ## customized build/install/deploy NB: make sure IMG is defined
+
+tear-down: undeploy uninstall
+
+redo-all: tear-down sleep-20 do-all ## run with `make --keep-going` for reliable dev-run-debug cycle action
+
+sleep-%:
+	sleep $(@:sleep-%=%)
