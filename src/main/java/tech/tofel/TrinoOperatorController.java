@@ -17,7 +17,6 @@ public class TrinoOperatorController implements Reconciler<TrinoOperator>, Error
         EventSourceInitializer<TrinoOperator> {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
-
     @Override
     public List<EventSource> prepareEventSources(
             EventSourceContext<TrinoOperator> context) {
@@ -42,5 +41,8 @@ public class TrinoOperatorController implements Reconciler<TrinoOperator>, Error
         return Optional.empty();
     }
 
+    public TrinoOperatorController() {
+        log.info("Starting operator.");
+    }
 }
 
