@@ -1,0 +1,30 @@
+apiVersion: "trinodb.tofel.tech/v1alpha1"
+kind: TrinoDB
+metadata:
+  name: trinodb
+spec:
+  # Add fields here
+  size: 1
+  
+  # Root user password
+  rootpwd: password
+
+  # New Database name
+  database: test-db
+  # Database additional user details (base64 encoded)
+  username: db-user 
+  password: db-user 
+
+  # Image name with version
+  image: "quay.io/btofel/trinodb:367-SNAPSHOT-amd64-v0.1"
+
+  # Database storage Path
+  dataStoragePath: "/mnt/data" 
+
+  # Database storage Size (Ex. 1Gi, 100Mi)
+  dataStorageSize: "1Gi"
+
+  # Port number exposed for Database service 
+  port: 8080
+
+
