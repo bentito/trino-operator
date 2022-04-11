@@ -2,6 +2,8 @@
 # Image URL to use all building/pushing image targets
 IMG ?= controller:latest
 
+.PHONY: install uninstall deploy undeploy
+
 all: docker-build
 
 ##@ General
@@ -23,7 +25,7 @@ help: ## Display this help.
 ##@ Build
 
 docker-build: ## Build docker image with the manager.
-	mvn package -Dquarkus.container-image.build=true -Dquarkus.container-image.image=${IMG}
+	mvn clean package -Dquarkus.container-image.build=true -Dquarkus.container-image.image=${IMG}
 
 docker-push: ## Push docker image with the manager.
 	mvn package -Dquarkus.container-image.push=true -Dquarkus.container-image.image=${IMG}
