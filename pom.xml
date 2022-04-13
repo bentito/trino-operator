@@ -18,6 +18,8 @@
     <fabric8-client.version>5.12.1</fabric8-client.version>
     <quarkus-sdk.version>3.0.3</quarkus-sdk.version>
     <quarkus.version>2.7.1.Final</quarkus.version>
+<!--    <quarkus.jib.jvm-arguments>-Djava.util.logging.manager=org.jboss.logmanager.LogManager,-Dvertx.cacheDirBase=/home/jboss/vertx-cache</quarkus.jib.jvm-arguments>-->
+    <quarkus.jib.base-jvm-image>registry.access.redhat.com/ubi8/openjdk-17@sha256:e2c7f23132ef04d94b735d58f7dd544088cf46cb23415e902ae446c45fc9268a</quarkus.jib.base-jvm-image>
   </properties>
   <repositories>
     <repository>
