@@ -1,0 +1,6 @@
+apiVersion: "trino-group.tofel.tech/v1alpha1"
+kind: Trino-operator
+metadata:
+  name: trinooperator
+spec:
+  imageRef: "quay.io/btofel/trinodb:367-SNAPSHOT-amd64-v0.1"
