@@ -2,6 +2,7 @@ package tech.tofel;
 
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.api.model.ObjectMetaBuilder;
+import io.fabric8.kubernetes.api.model.ServiceBuilder;
 import io.fabric8.kubernetes.api.model.apps.DeploymentBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.javaoperatorsdk.operator.api.reconciler.*;
@@ -34,15 +35,17 @@ public class TrinoOperatorController implements Reconciler<TrinoOperator>, Error
     }
 
     @Override
-    public UpdateControl<TrinoOperator> reconcile(TrinoOperator schema, Context context) {
-        log.info("Reconciling update: {}", schema.getMetadata().getName());
-        final var name = schema.getMetadata().getName();
-        final var labels = Map.of(APP_LABEL, schema.getMetadata().getName());
-        final var spec = schema.getSpec();
+    public UpdateControl<TrinoOperator> reconcile(TrinoOperator trinoDBApp, Context context) {
+        log.info("Reconciling update: {}", trinoDBApp.getMetadata().getName());
+        final var name = trinoDBApp.getMetadata().getName();
+        final var labels = Map.of(APP_LABEL, trinoDBApp.getMetadata().getName());
+        final var spec = trinoDBApp.getSpec();
         final var imageRef = spec.getImageRef();
+        final var metadata = createMetadata(trinoDBApp, labels);
 
+        log.info("Create deployment {}", metadata.getName());
         var deployment = new DeploymentBuilder()
-                .withMetadata(createMetadata(schema, labels))
+                .withMetadata(metadata)
                 .withNewSpec()
                 .withNewSelector().withMatchLabels(labels).endSelector()
                 .withNewTemplate()
@@ -58,8 +61,22 @@ public class TrinoOperatorController implements Reconciler<TrinoOperator>, Error
                 .endTemplate()
                 .endSpec()
                 .build();
-
         client.apps().deployments().createOrReplace(deployment);
+
+        log.info("Create service {}", metadata.getName());
+        client.services().createOrReplace(new ServiceBuilder()
+                .withMetadata(createMetadata(trinoDBApp, labels))
+                .withNewSpec()
+                .addNewPort()
+                .withName("http")
+                .withPort(8080)
+                .withNewTargetPort().withIntVal(8080).endTargetPort()
+                .endPort()
+                .withSelector(labels)
+                .withType("ClusterIP")
+                .endSpec()
+                .build());
+
         return UpdateControl.noUpdate();
     }
 
