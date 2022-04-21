@@ -43,9 +43,11 @@ uninstall: ## Uninstall CRDs from the K8s cluster specified in ~/.kube/config.
 
 deploy: ## Deploy controller to the K8s cluster specified in ~/.kube/config.
 	kubectl apply -f target/kubernetes/kubernetes.yml
+	kubectl apply -f deploy/rbac/trinodb_rbac.yaml
 
 undeploy: ## Undeploy controller from the K8s cluster specified in ~/.kube/config.
 	kubectl delete -f target/kubernetes/kubernetes.yml
+	kubectl delete -f deploy/rbac/trinodb_rbac.yaml
 
 do-all: docker-build docker-push-alt install deploy ## customized build/install/deploy NB: make sure IMG is defined
 

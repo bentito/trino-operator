@@ -1,0 +1,24 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: trinooperator-cluster-role
+  namespace: default
+rules:
+  - apiGroups:
+      - trino-group.tofel.tech
+      - apps
+      - ""
+    resources:
+      - trino-operators
+      - trino-operators/status
+      - deployments
+      - services
+      - ingresses
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - delete
+      - patch
+      - update
