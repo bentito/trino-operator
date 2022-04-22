@@ -8,6 +8,7 @@ rules:
       - trino-group.tofel.tech
       - apps
       - ""
+      - networking.k8s.io
     resources:
       - trino-operators
       - trino-operators/status

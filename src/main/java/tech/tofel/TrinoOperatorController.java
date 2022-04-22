@@ -4,6 +4,7 @@ import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.api.model.ObjectMetaBuilder;
 import io.fabric8.kubernetes.api.model.ServiceBuilder;
 import io.fabric8.kubernetes.api.model.apps.DeploymentBuilder;
+import io.fabric8.kubernetes.api.model.networking.v1.*;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.javaoperatorsdk.operator.api.reconciler.*;
 import io.javaoperatorsdk.operator.processing.event.source.EventSource;
@@ -74,6 +75,26 @@ public class TrinoOperatorController implements Reconciler<TrinoOperator>, Error
                 .endPort()
                 .withSelector(labels)
                 .withType("ClusterIP")
+                .endSpec()
+                .build());
+
+        log.info("Create ingress {}", metadata.getName());
+        metadata.setAnnotations(Map.of(
+                "nginx.ingress.kubernetes.io/rewrite-target", "/",
+                "kubernetes.io/ingress.class", "nginx"
+        ));
+
+        client.network().v1().ingresses().createOrReplace(new IngressBuilder()
+                .withMetadata(metadata)
+                .withNewSpec()
+                .withNewDefaultBackend()
+                .withNewService()
+                .withName("trinooperator")
+                .withNewPort()
+                .withNumber(8080)
+                .endPort()
+                .endService()
+                .endDefaultBackend()
                 .endSpec()
                 .build());
 
