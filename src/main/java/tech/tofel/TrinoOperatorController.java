@@ -25,8 +25,8 @@ public class TrinoOperatorController implements Reconciler<TrinoOperator>, Error
     private final KubernetesClient client;
 
     public TrinoOperatorController(KubernetesClient client) {
+        log.info("instantiating client in namespace: {}", client.getNamespace());
         this.client = client;
-
     }
 
     @Override
@@ -78,6 +78,7 @@ public class TrinoOperatorController implements Reconciler<TrinoOperator>, Error
                 .endSpec()
                 .build());
 
+        //TODO this may still not be correct for the ingress, as have not been able to connect trino CLI and see work
         log.info("Create ingress {}", metadata.getName());
         metadata.setAnnotations(Map.of(
                 "nginx.ingress.kubernetes.io/rewrite-target", "/",
@@ -89,7 +90,7 @@ public class TrinoOperatorController implements Reconciler<TrinoOperator>, Error
                 .withNewSpec()
                 .withNewDefaultBackend()
                 .withNewService()
-                .withName("trinooperator")
+                .withName(name)
                 .withNewPort()
                 .withNumber(8080)
                 .endPort()
