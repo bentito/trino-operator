@@ -78,8 +78,8 @@ public class TrinoOperatorController implements Reconciler<TrinoOperator>, Error
                 .endSpec()
                 .build());
 
-        //TODO this may still not be correct for the ingress, as have not been able to connect trino CLI and see work
-        log.info("Create ingress {}", metadata.getName());
+        log.info("Create ingress {}. Note: Must add `ingress-nginx-controller` to your cluster. " +
+                "Must port-forward to the ingress controller see README", metadata.getName());
         metadata.setAnnotations(Map.of(
                 "nginx.ingress.kubernetes.io/rewrite-target", "/",
                 "kubernetes.io/ingress.class", "nginx"
