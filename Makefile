@@ -33,6 +33,9 @@ docker-push: ## Push docker image with the manager.
 docker-push-alt: ## just use container engine to do the push
 	docker push ${IMG}
 
+podman-push-alt: ## just use container engine to do the push
+	podman push --tls-verify=false ${IMG}
+
 ##@ Deployment
 
 install: ## Install CRDs into the K8s cluster specified in ~/.kube/config.
