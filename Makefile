@@ -55,7 +55,7 @@ do-all: docker-build docker-push-alt install deploy ## customized build/install/
 
 tear-down: undeploy uninstall
 
-redo-all: tear-down sleep-20 do-all ## run with `make --keep-going` for reliable dev-run-debug cycle action
+redo-all: tear-down sleep-5 do-all ## run with `make --keep-going` for reliable dev-run-debug cycle action
 
 sleep-%:
 	sleep $(@:sleep-%=%)

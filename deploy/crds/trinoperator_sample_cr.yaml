@@ -4,3 +4,11 @@ metadata:
   name: trino-db
 spec:
   imageRef: "quay.io/btofel/trinodb:367-SNAPSHOT-amd64-v0.1"
+#  trino /etc/trino/config.properties settings
+  coordinator: true
+  nodeSchedulerIncludeCoordinator: true
+  httpServerHttpPort: 8080
+  discoveryURI: "http://localhost:8080"
+
+# catalog /etc/trino/catalog settings
+  catalogs: ["test"]
