@@ -15,9 +15,10 @@
     <maven.compiler.target>11</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <fabric8-client.version>5.12.2</fabric8-client.version>
-    <quarkus-sdk.version>3.0.8</quarkus-sdk.version>
-    <quarkus.version>2.10.2.Final</quarkus.version>
+    <fabric8-client.version>6.6.2</fabric8-client.version>
+    <quarkus-sdk.version>6.1.1</quarkus-sdk.version>
+    <quarkus-operator-sdk-csv-generator>3.0.9</quarkus-operator-sdk-csv-generator>
+    <quarkus.version>3.1.0.Final</quarkus.version>
 <!--    <quarkus.jib.jvm-arguments>-Djava.util.logging.manager=org.jboss.logmanager.LogManager,-Dvertx.cacheDirBase=/home/jboss/vertx-cache</quarkus.jib.jvm-arguments>-->
 <!--    <quarkus.jib.base-jvm-image>registry.access.redhat.com/ubi8/openjdk-17@sha256:e2c7f23132ef04d94b735d58f7dd544088cf46cb23415e902ae446c45fc9268a</quarkus.jib.base-jvm-image>-->
   </properties>
@@ -32,48 +33,35 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>io.fabric8</groupId>
-        <artifactId>kubernetes-client-bom</artifactId>
-        <version>${fabric8-client.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
         <groupId>io.quarkus</groupId>
         <artifactId>quarkus-bom</artifactId>
         <version>${quarkus.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      <dependency>
+        <groupId>io.quarkiverse.operatorsdk</groupId>
+        <artifactId>quarkus-operator-sdk-bom</artifactId>
+        <version>${quarkus-sdk.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
+
   <dependencies>
     <dependency>
       <groupId>io.quarkiverse.operatorsdk</groupId>
       <artifactId>quarkus-operator-sdk</artifactId>
-      <version>${quarkus-sdk.version}</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/io.quarkiverse.operatorsdk/quarkus-operator-sdk-deployment -->
     <dependency>
       <groupId>io.quarkiverse.operatorsdk</groupId>
       <artifactId>quarkus-operator-sdk-deployment</artifactId>
-      <version>${quarkus-sdk.version}</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/io.quarkiverse.operatorsdk/quarkus-operator-sdk-csv-generator -->
     <dependency>
       <groupId>io.quarkiverse.operatorsdk</groupId>
-      <artifactId>quarkus-operator-sdk-csv-generator</artifactId>
-      <version>${quarkus-sdk.version}</version>
+      <artifactId>quarkus-operator-sdk-bundle-generator</artifactId>
     </dependency>
-    <!--  This dependency is needed only to ensure proper building order so that this module is build after the CSV extension -->
-    <!-- https://mvnrepository.com/artifact/io.quarkiverse.operatorsdk/quarkus-operator-sdk-csv-generator-deployment -->
-    <dependency>
-      <groupId>io.quarkiverse.operatorsdk</groupId>
-      <artifactId>quarkus-operator-sdk-csv-generator-deployment</artifactId>
-      <version>${quarkus-sdk.version}</version>
-      <scope>provided</scope>
-    </dependency>
-
   </dependencies>
 
   <build>
@@ -105,5 +93,4 @@
       </properties>
     </profile>
   </profiles>
-
 </project>

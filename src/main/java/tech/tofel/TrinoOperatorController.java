@@ -15,10 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@ControllerConfiguration(finalizerName = Constants.NO_FINALIZER, namespaces = Constants.WATCH_CURRENT_NAMESPACE,
-        name = "trinooperator")
-public class TrinoOperatorController implements Reconciler<TrinoOperator>, ErrorStatusHandler<TrinoOperator>,
-        EventSourceInitializer<TrinoOperator> {
+@ControllerConfiguration
+public class TrinoOperatorController implements Reconciler<TrinoOperator>{
 
     private final Logger log = LoggerFactory.getLogger(getClass());
     static final String APP_LABEL = "app.kubernetes.io/name";
@@ -27,12 +25,6 @@ public class TrinoOperatorController implements Reconciler<TrinoOperator>, Error
     public TrinoOperatorController(KubernetesClient client) {
         log.info("instantiating client in namespace: {}", client.getNamespace());
         this.client = client;
-    }
-
-    @Override
-    public List<EventSource> prepareEventSources(
-            EventSourceContext<TrinoOperator> context) {
-        return List.of();
     }
 
     @Override
@@ -94,7 +86,7 @@ public class TrinoOperatorController implements Reconciler<TrinoOperator>, Error
                 .addNewPort()
                 .withName("http")
                 .withPort(8080)
-                .withNewTargetPort().withIntVal(8080).endTargetPort()
+                .withNewTargetPort().withValue(8080).endTargetPort()
                 .endPort()
                 .withSelector(labels)
                 .withType("ClusterIP")
@@ -131,18 +123,6 @@ public class TrinoOperatorController implements Reconciler<TrinoOperator>, Error
         for (String catalog : spec.getCatalogs()) {
             log.info("Creating catalog {}", catalog);
         }
-    }
-
-    @Override
-    public DeleteControl cleanup(TrinoOperator schema, Context context) {
-        log.info("Cleaning up for: {}", schema.getMetadata().getName());
-        return DeleteControl.noFinalizerRemoval();
-    }
-
-    @Override
-    public Optional<TrinoOperator> updateErrorStatus(TrinoOperator schema, RetryInfo retryInfo,
-                                                     RuntimeException e) {
-        return Optional.empty();
     }
 
     private ObjectMeta createMetadata(TrinoOperator resource, Map<String, String> labels) {

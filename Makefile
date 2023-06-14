@@ -44,9 +44,11 @@ install: ## Install CRDs into the K8s cluster specified in ~/.kube/config.
 uninstall: ## Uninstall CRDs from the K8s cluster specified in ~/.kube/config.
 	@$(foreach file, $(wildcard target/kubernetes/*-v1.yml), kubectl delete -f $(file);)
 
-deploy: ## Deploy controller to the K8s cluster specified in ~/.kube/config.
+deploy: deploy-rbac ## Deploy controller to the K8s cluster specified in ~/.kube/config.
 	kubectl apply -f target/kubernetes/kubernetes.yml
-	kubectl apply -f deploy/rbac/trinodb_rbac.yaml
+
+deploy-rbac:
+	@$(foreach file, $(wildcard deploy/rbac/trinodb_rbac*.yaml), kubectl apply -f $(file);)
 
 undeploy: ## Undeploy controller from the K8s cluster specified in ~/.kube/config.
 	kubectl delete -f target/kubernetes/kubernetes.yml
